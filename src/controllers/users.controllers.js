@@ -55,7 +55,7 @@ const createUser = async(req, res) => {
     }
 
 
-}
+};
  const updateUser = async (req, res) => {
     try {
         const {id} = req.params;
@@ -65,7 +65,7 @@ const createUser = async(req, res) => {
     } catch (error) {
         console.log(error);
     }
- }
+ };
 module.exports = {
     getAllusers,
     getUserById,

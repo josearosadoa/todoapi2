@@ -16,6 +16,6 @@ router.get('/users/:id/tasks', getUserWithTasks);
 
 router.post('/users', createUser);
 
-router.put('/users', updateUser);
+router.put('/users/:id', updateUser);
 
 module.exports = router;
