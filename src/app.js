@@ -28,9 +28,9 @@ app.use(express.json());
 app.use('/api/v1', userRoutes);
 app.use('/api/v1', tasksRoutes);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 
-app.listen(8000, () => {
-    console.log('servidor corriendo');
-});
+app.listen(PORT, () => {
+    console.log('servidor corriendo' + PORT);
+}); 
