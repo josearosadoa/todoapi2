@@ -2,7 +2,7 @@
 
 const Address = require('../models/adresses.models');
 const Categories = require('../models/categories.models');
-const TaskCategories = require('../models/taskCategories');
+const TaskCategories = require('../models/taskcategories.models');
 const Tasks = require('../models/tasks.models');
 const Users = require('../models/users.models');
 
@@ -64,6 +64,16 @@ class UserServices {
                     },
                 },
             });
+            return result;
+        } catch (error) {
+            throw error;
+        }
+
+        
+    }
+    static async add () {
+        try {
+            const result = await Users.create(newUser);
             return result;
         } catch (error) {
             throw error;
