@@ -22,6 +22,12 @@ app.use( (req, res, next) => {
 const userRoutes = require('./Routes/users.route');  //importo las rutas del usuario
 const tasksRoutes = require('./Routes/tasks.routes');
 
+const app = express();
+
+app.use(express.json());
+
+const PORT = process.env.PORT || 3000;
+
 db.authenticate() //devuelve una promesa
 .then(() => console.log("Autenticacion exitosa"))
 .catch((error) => console.log(error));
@@ -33,10 +39,14 @@ db.sync({force: false})
 
 initModels();
 
+<<<<<<< HEAD
 app.get('/', (req, res, next) => {
     console.log("antes de responder en la raiz");
     next();
 }, (req, res) => {
+=======
+app.get('/', (req, res) => {
+>>>>>>> b10013da8af6f00901253c0f7b991809f52a2bad
     res.status(200).json("todo bien");
 });
 
@@ -44,7 +54,7 @@ app.get('/', (req, res, next) => {
 app.use('/api/v1', userRoutes);
 app.use('/api/v1', tasksRoutes);
 
-const PORT = process.env.PORT || 3000;
+
 
 app.use(handlerError); 
 
