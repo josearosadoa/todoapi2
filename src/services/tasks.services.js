@@ -1,4 +1,6 @@
 const { where } = require("sequelize");
+const Categories = require("../models/categories.models");
+const TaskCategories = require("../models/taskcategories.models");
 const Tasks = require("../models/tasks.models");
 const Users = require("../models/users.models");
 
@@ -14,9 +16,23 @@ class TaskServices {
         }
     }
 
-static async getTaskId(id) {
+static async getTaskId(userId) {
     try {
-        const result = await Tasks.findByPk(id, {attributes: ['title', 'description', 'is_complete'],});
+        const result = await Tasks.findAll({
+            where: {userId},
+            attributes: ['id', 'title', 'description', 'is_complete'],
+            include : {
+                model: TaskCategories,
+                as: 'categories',
+                attributes: ['category_id'],
+                include: {
+                    model: Categories,
+                    as: 'categories',
+                    attributes: ['name']
+                },
+            },
+        
+        });
         return result;
     } catch (error) {
         throw error;
@@ -42,19 +58,27 @@ static async getTaskJoinUser(id){
     }
 }
 
-static async createdNewTask(newTask){
+static async createdNewTask(task, categories){
     try {
-        const result = await Tasks.create(newTask);
-        return result;
+        const TaskResult = await Tasks.create(task);
+        //cuando se crea la tarea se devuelve un objeto {}
+        const {id} = TaskResult;
+        categories.forEach( 
+            async (category) => 
+            await TaskCategories.create({categoryId: category, taskId: id })
+            );
+            return TaskResult;
     } catch (error) {
         throw error;
     }
 }
 
-static async updateTaskNow(id, taskUpdate){
+static async updateStatus(id){
     try {
-        const result = await Tasks.update(taskUpdate,{
+        const result = await Tasks.update(
+            {isComplete: true},{
             where: {id},
+
             
         });
         return result;

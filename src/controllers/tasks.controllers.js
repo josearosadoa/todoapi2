@@ -12,13 +12,17 @@ const getAllTasks = async (req, res) => {
     }
 };
 
-const getTaskById = async (req, res) => {
+const getTaskById = async (req, res, next ) => {
     try {
-        const {id} = req.params;
-        const result = await TaskServices.getTaskId(id);
+        const {userId} = req.params;
+        const result = await TaskServices.getTaskId(userId);
         res.status(200).json(result);
         } catch (error) {
-        console.log(error);
+        next({
+            message: 'no se pudieron obtener las tareas',
+            status: 400,
+            errorContent: error,
+        });
     }
 };
 
@@ -33,27 +37,33 @@ const getTaskWithUser = async (req, res) => {
 
 };
 
-const createdTask = async (req, res) => {
+const createdTask = async (req, res, next) => {
     try {
-        const {title, description, is_complete, userId} = req.body;
-        const newTask = {title, description, is_complete, userId};
-        const result = await TaskServices.createdNewTask(newTask);
-        res.status(201).json(result);
+        const {task, categories} = req.body;
+        const result = await TaskServices.createdNewTask(task, categories);
+        res.status(201).json({message: 'La tarea fue creada'});
     
     } catch (error) {
-        console.log(error);
+        next({
+            message:'Algo salio mal',
+            status: 400,
+            errorContent: error,
+        });
     }
 
 };
 
-const updateTask = async (req, res) => {
+const completeTask = async (req, res, next) => {
     try {
-        const {id, title, description, is_complete, userId} = req.body;
-        const taskUpdate = {id, title, description, is_complete, userId};
-        const result = await TaskServices.updateTaskNow(id, taskUpdate);
-        res.status(200).json(result);
+        const {id} = req.params;
+        const result = await TaskServices.updateStatus(id);
+        res.status(200).json({message: "Tarea actualizada"});
     } catch (error) {
-        console.log(error);
+        next({
+            message: "No se ha podido actualizar la tarea",
+            status: 400,
+            error: error,
+        });
     }
 };
 
@@ -72,6 +82,6 @@ module.exports = {
     getTaskById,
     getTaskWithUser,
     createdTask,
-    updateTask,
+    completeTask,
     deleteTask,
 };
