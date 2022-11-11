@@ -71,7 +71,7 @@ class UserServices {
 
         
     }
-    static async add (newUser) {
+    static async add(newUser) {
         try {
             const result = await Users.create(newUser);
             return result;

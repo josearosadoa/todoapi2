@@ -51,18 +51,17 @@ const createUser = async(req, res, next) => {
         res.status(201).json(result);
     } catch (error) {
 
-        next({status: 418, errorContent: error, message: 'revisa bien lo que envias'});
+        next({
+            status: 418, 
+            errorContent: error, 
+            message: 'revisa bien lo que envias',
+        });
         
     }
 
 
-<<<<<<< HEAD
 }
  const updateUser = async (req, res, next) => {
-=======
-};
- const updateUser = async (req, res) => {
->>>>>>> b10013da8af6f00901253c0f7b991809f52a2bad
     try {
         const {id} = req.params;
         const updateData = req.body;
@@ -71,7 +70,7 @@ const createUser = async(req, res, next) => {
     } catch (error) {
         next(error);
     }
- };
+ }
 module.exports = {
     getAllusers,
     getUserById,

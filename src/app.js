@@ -2,31 +2,26 @@ const express = require('express');
 const initModels = require('./models/initModels');
 const morgan = require('morgan');
 const handlerError = require('./middlewares/error');
+const authRoutes = require('./Routes/auth.routes');
+const db = require('./utils/database');
+const userRoutes = require('./Routes/users.route');  //importo las rutas del usuario
+const tasksRoutes = require('./Routes/tasks.routes');
 
 //importamos la instancia de la database.js 
 
-const db = require('./utils/database');
 require('dotenv').config();
-const logs = require('./middlewares/requestLogs');
+
 
 const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(logs);
+
 
 app.use( (req, res, next) => {
     console.log("Antes de atender la peticion");
     next();
 })
 
-const userRoutes = require('./Routes/users.route');  //importo las rutas del usuario
-const tasksRoutes = require('./Routes/tasks.routes');
-
-const app = express();
-
-app.use(express.json());
-
-const PORT = process.env.PORT || 3000;
 
 db.authenticate() //devuelve una promesa
 .then(() => console.log("Autenticacion exitosa"))
@@ -39,24 +34,21 @@ db.sync({force: false})
 
 initModels();
 
-<<<<<<< HEAD
 app.get('/', (req, res, next) => {
     console.log("antes de responder en la raiz");
     next();
 }, (req, res) => {
-=======
-app.get('/', (req, res) => {
->>>>>>> b10013da8af6f00901253c0f7b991809f52a2bad
     res.status(200).json("todo bien");
 });
 
 
 app.use('/api/v1', userRoutes);
 app.use('/api/v1', tasksRoutes);
+app.use('/api/v1', authRoutes)
 
+const PORT = process.env.PORT || 3000;
 
-
-app.use(handlerError); 
+app.use( handlerError); 
 
 app.listen(PORT, () => {
     console.log('servidor corriendo' + PORT);

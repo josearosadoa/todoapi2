@@ -1,6 +1,8 @@
 const db = require('../utils/database');
+const bcrypt = require('bcrypt');
 
 const {DataTypes} = require("sequelize");
+const { use } = require('../Routes/users.route');
 
 const Users = db.define('users', {
     id: {
@@ -26,6 +28,14 @@ const Users = db.define('users', {
             allowNull: false,
         },
      
+},{
+    hooks: {
+        beforeCreate: (user, options) => {
+            const {password} = user;
+            const hash = bcrypt.hashSync(password, 8); //este metodo devuelve un hash de la password
+            user.password = hash;
+        }
+    }
 });
 
 module.exports = Users; 

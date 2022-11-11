@@ -1,8 +1,8 @@
 const handlerError = (error, req, res, next) => {
     const {status, errorContent, message} = error;
     res.status(status).json({
-        message,
-        error: errorContent.message
+        message: "no pudo leer",
+        errorContent: error,
 })
 };
 
